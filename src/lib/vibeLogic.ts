@@ -48,23 +48,29 @@ function generateVibeFallback(): VibeResult {
 }
 
 /**
- * สร้างดวงรายวันด้วย Gemini AI
+ * สร้างดวงรายวันด้วย Groq AI
  *
- * ใช้ Gemini 1.5 Flash เพื่อสร้าง:
- * - Luck Score (0-100) ที่สะท้อนอารมณ์
- * - คำทำนายที่สนุก แซว และเข้ากับ mood
- * - สี 3 สีที่เข้ากับอารมณ์
- * - เพลงไทยที่เหมาะสม
+ * ขั้นตอน:
+ * 1. สุ่ม Luck Score (0-100) ด้วย Math.random() - สุ่มจริงๆ ไม่มี bias
+ * 2. ส่ง Mood + Luck Score ให้ AI วิเคราะห์และสร้าง:
+ *    - คำทำนายที่เข้ากับทั้ง mood และ luck score
+ *    - สี 3 สีที่เข้ากับอารมณ์
+ *    - เพลงไทยที่เหมาะสม
  *
  * @param moodInput ข้อความความรู้สึกจากผู้ใช้
  */
 export async function generateVibe(moodInput: string): Promise<VibeResult> {
+  // 1. สุ่ม Luck Score ด้วย JavaScript (0-100) - สุ่มจริงๆ ยุติธรรม 100%
+  const luckScore = Math.floor(Math.random() * 101);
+
+  console.log('🎲 Randomly generated Luck Score:', luckScore);
+
   try {
-    // เรียก Gemini AI
-    const aiResult = await generateVibeWithAI(moodInput);
+    // 2. เรียก Groq AI โดยส่ง mood และ luckScore ไปด้วย
+    const aiResult = await generateVibeWithAI(moodInput, luckScore);
 
     return {
-      luckScore: aiResult.luck_score,
+      luckScore: luckScore, // ใช้ค่าที่สุ่มด้วย Math.random()
       fortuneText: aiResult.fortune_text,
       colors: aiResult.colors,
       song: aiResult.song,
@@ -72,8 +78,12 @@ export async function generateVibe(moodInput: string): Promise<VibeResult> {
   } catch (error) {
     console.error('Groq AI failed, using fallback random logic:', error);
 
-    // ถ้า AI fail ให้ใช้ fallback
-    return generateVibeFallback();
+    // ถ้า AI fail ให้ใช้ fallback (แต่ยังใช้ luckScore ที่สุ่มไว้แล้ว)
+    const fallbackResult = generateVibeFallback();
+    return {
+      ...fallbackResult,
+      luckScore: luckScore, // ใช้ค่าที่สุ่มไว้แล้ว ไม่ใช้ของ fallback
+    };
   }
 }
 
