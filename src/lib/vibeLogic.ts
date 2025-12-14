@@ -23,9 +23,9 @@ function generateRandomColors(count: number = 3): string[] {
 }
 
 /**
- * Fallback Function: สุ่มดวงแบบ Random (ใช้ตอน Gemini AI ล้มเหลว)
+ * Fallback Function: สุ่มดวงแบบ Random (ใช้ตอน AI ล้มเหลว)
  */
-function generateVibeFallback(moodInput?: string): VibeResult {
+function generateVibeFallback(): VibeResult {
   const luckScore = Math.floor(Math.random() * 101);
 
   let fortunePool = FORTUNES;
@@ -70,10 +70,10 @@ export async function generateVibe(moodInput: string): Promise<VibeResult> {
       song: aiResult.song,
     };
   } catch (error) {
-    console.error('Gemini AI failed, using fallback random logic:', error);
+    console.error('Groq AI failed, using fallback random logic:', error);
 
-    // ถ้า Gemini fail ให้ใช้ fallback
-    return generateVibeFallback(moodInput);
+    // ถ้า AI fail ให้ใช้ fallback
+    return generateVibeFallback();
   }
 }
 
