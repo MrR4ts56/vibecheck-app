@@ -1,11 +1,18 @@
 import { UserButton } from '@clerk/clerk-react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Shield, History } from 'lucide-react';
+import { useAdmin } from '../../hooks/useAdmin';
+
+interface HeaderProps {
+  showHistory?: boolean;
+  onHistoryClick?: () => void;
+}
 
 /**
  * Header Component พร้อมปุ่ม Logout และโลโก้
  */
-export function Header() {
+export function Header({ showHistory = false, onHistoryClick }: HeaderProps) {
+  const { isAdmin } = useAdmin();
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
@@ -13,7 +20,7 @@ export function Header() {
       transition={{ duration: 0.6 }}
       className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-8 md:py-6"
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Sparkles className="w-6 h-6 text-white" />
@@ -29,8 +36,30 @@ export function Header() {
           </p>
         </div>
 
-        {/* User Profile */}
-        <div className="flex items-center gap-3">
+        {/* Right Side Actions */}
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* History Button */}
+          {showHistory && (
+            <button
+              onClick={onHistoryClick}
+              className="flex items-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg transition-all text-white text-sm font-medium"
+            >
+              <History className="w-4 h-4" />
+              <span className="hidden md:inline">ประวัติ</span>
+            </button>
+          )}
+
+          {/* Admin Panel Button */}
+          {isAdmin && (
+            <a
+              href="/admin"
+              className="flex items-center gap-2 px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-lg transition-all text-purple-300 hover:text-purple-200 text-sm font-medium"
+            >
+              <Shield className="w-4 h-4" />
+              <span className="hidden md:inline">Admin</span>
+            </a>
+          )}
+
           <UserButton
             appearance={{
               elements: {

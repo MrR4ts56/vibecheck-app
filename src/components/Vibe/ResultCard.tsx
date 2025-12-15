@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Heart, Music } from 'lucide-react';
 import { createGradient, getLuckLabel } from '../../lib/vibeLogic';
+import { SpecialEffects } from './SpecialEffects';
 import type { DailyVibe } from '../../lib/db';
 
 interface ResultCardProps {
@@ -16,14 +17,18 @@ export function ResultCard({ vibe }: ResultCardProps) {
   const luckLabel = getLuckLabel(vibe.luck_score);
 
   return (
-    <motion.div
-      id="vibe-result-card"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6 }}
-      className="w-full max-w-2xl mx-auto"
-    >
-      <div className="glass-card p-8 md:p-12 relative overflow-hidden">
+    <>
+      {/* Special Effects */}
+      <SpecialEffects luckScore={vibe.luck_score} />
+
+      <motion.div
+        id="vibe-result-card"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-2xl mx-auto"
+      >
+        <div className="glass-card p-8 md:p-12 relative overflow-hidden">
         {/* Background Gradient */}
         <div
           className="absolute inset-0 opacity-20"
@@ -105,5 +110,6 @@ export function ResultCard({ vibe }: ResultCardProps) {
         </div>
       </div>
     </motion.div>
+    </>
   );
 }

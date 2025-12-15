@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { getTodayVibe, insertVibe, type DailyVibe } from '../lib/db';
+import { getTodayVibe, insertVibe, getLockedScore, type DailyVibe } from '../lib/db';
 import { generateVibe, type VibeResult } from '../lib/vibeLogic';
 import { useAuth } from './useAuth';
+import { useAdmin } from './useAdmin';
 
 /**
  * Custom Hook สำหรับจัดการ Daily Vibe CRUD operations
  */
 export function useDailyVibe() {
   const { userId } = useAuth();
+  const { isAdmin, user } = useAdmin();
   const [todayVibe, setTodayVibe] = useState<DailyVibe | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +49,8 @@ export function useDailyVibe() {
       return null;
     }
 
-    if (todayVibe) {
+    // Admin เล่นได้ไม่จำกัด, User ทั่วไปเล่นได้วันละครั้ง
+    if (!isAdmin && todayVibe) {
       setError('คุณเล่นไปแล้วในวันนี้');
       return null;
     }
@@ -56,8 +59,18 @@ export function useDailyVibe() {
       setIsLoading(true);
       setError(null);
 
-      // สุ่มดวงด้วย Gemini AI
-      const vibeResult: VibeResult = await generateVibe(moodInput || 'วันนี้รู้สึกดี');
+      // เช็คว่ามี locked_score หรือไม่
+      const lockedScore = user?.locked_score ?? await getLockedScore(userId);
+
+      let vibeResult: VibeResult;
+
+      if (lockedScore !== null && lockedScore !== undefined) {
+        // ใช้ locked_score แทนการสุ่ม
+        vibeResult = await generateVibe(moodInput || 'วันนี้รู้สึกดี', lockedScore);
+      } else {
+        // สุ่มดวงด้วย Gemini AI แบบปกติ
+        vibeResult = await generateVibe(moodInput || 'วันนี้รู้สึกดี');
+      }
 
       // บันทึกลง Database
       const newVibe = await insertVibe({

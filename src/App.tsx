@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { ProtectedRoute } from './components/Auth/ProtectedRoute';
 import { Background } from './components/Layout/Background';
 import { Header } from './components/Layout/Header';
+import { BackgroundMusic } from './components/Layout/BackgroundMusic';
 import { MoodInput } from './components/Vibe/MoodInput';
 import { LoadingAnimation } from './components/Vibe/LoadingAnimation';
 import { ResultCard } from './components/Vibe/ResultCard';
 import { SaveImageButton } from './components/Vibe/SaveImageButton';
-import { HistoryButton } from './components/History/HistoryButton';
 import { HistoryModal } from './components/History/HistoryModal';
 import { useDailyVibe } from './hooks/useDailyVibe';
 
@@ -30,14 +30,13 @@ function App() {
   return (
     <ProtectedRoute>
       <Background />
+      <BackgroundMusic />
 
       <div className="min-h-screen relative">
-        <Header />
-
-        {/* History Button */}
-        {hasPlayedToday && (
-          <HistoryButton onClick={() => setIsHistoryOpen(true)} />
-        )}
+        <Header
+          showHistory={hasPlayedToday}
+          onHistoryClick={() => setIsHistoryOpen(true)}
+        />
 
         {/* Main Content */}
         <div className="container mx-auto px-4 pt-24 pb-12 flex flex-col items-center justify-center min-h-screen">

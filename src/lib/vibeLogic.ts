@@ -52,18 +52,20 @@ function generateVibeFallback(): VibeResult {
  *
  * ขั้นตอน:
  * 1. สุ่ม Luck Score (0-100) ด้วย Math.random() - สุ่มจริงๆ ไม่มี bias
+ *    (หรือใช้ lockedScore ถ้ามีการกำหนดไว้สำหรับเทส)
  * 2. ส่ง Mood + Luck Score ให้ AI วิเคราะห์และสร้าง:
  *    - คำทำนายที่เข้ากับทั้ง mood และ luck score
  *    - สี 3 สีที่เข้ากับอารมณ์
  *    - เพลงไทยที่เหมาะสม
  *
  * @param moodInput ข้อความความรู้สึกจากผู้ใช้
+ * @param lockedScore (Optional) Score ที่ถูกล็อคไว้สำหรับการเทส
  */
-export async function generateVibe(moodInput: string): Promise<VibeResult> {
-  // 1. สุ่ม Luck Score ด้วย JavaScript (0-100) - สุ่มจริงๆ ยุติธรรม 100%
-  const luckScore = Math.floor(Math.random() * 101);
+export async function generateVibe(moodInput: string, lockedScore?: number): Promise<VibeResult> {
+  // 1. ใช้ lockedScore ถ้ามี ไม่งั้นสุ่มแบบปกติ
+  const luckScore = lockedScore !== undefined ? lockedScore : Math.floor(Math.random() * 101);
 
-  console.log('🎲 Randomly generated Luck Score:', luckScore);
+  console.log('🎲 Luck Score:', luckScore, lockedScore !== undefined ? '(locked)' : '(random)');
 
   try {
     // 2. เรียก Groq AI โดยส่ง mood และ luckScore ไปด้วย
