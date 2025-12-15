@@ -27,41 +27,54 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
     return () => clearTimeout(timer);
   }, [luckScore]);
 
-  // 0 หรือ 100: Perfect Score - Fireworks
+  // 0 หรือ 100: Perfect Score - Fireworks ตกลงมา + เด้ง
   if ((luckScore === 0 || luckScore === 100) && showEffect) {
     return (
       <AnimatePresence>
         <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-          {/* Fireworks Effect */}
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute"
-              initial={{
-                x: '50%',
-                y: '50%',
-                scale: 0,
-                opacity: 1,
-              }}
-              animate={{
-                x: `${Math.random() * 100}%`,
-                y: `${Math.random() * 100}%`,
-                scale: [0, 1.5, 0],
-                opacity: [1, 1, 0],
-              }}
-              transition={{
-                duration: 2,
-                delay: i * 0.1,
-                ease: 'easeOut',
-              }}
-            >
-              <Sparkles
-                className={`w-8 h-8 ${
-                  luckScore === 100 ? 'text-yellow-400' : 'text-purple-400'
-                }`}
-              />
-            </motion.div>
-          ))}
+          {/* Fireworks Effect - ตกลงมาจากบน */}
+          {[...Array(30)].map((_, i) => {
+            const startX = Math.random() * 100;
+            const finalY = 70 + Math.random() * 20;
+            return (
+              <motion.div
+                key={i}
+                className="absolute text-4xl"
+                style={{ left: `${startX}%` }}
+                initial={{
+                  y: -100,
+                  rotate: Math.random() * 360,
+                  scale: 0.5,
+                  opacity: 1,
+                }}
+                animate={{
+                  y: [
+                    -100,
+                    finalY + '%',
+                    (finalY - 5) + '%',
+                    finalY + '%',
+                    (finalY - 3) + '%',
+                    finalY + '%',
+                  ],
+                  rotate: Math.random() * 720,
+                  scale: [0.5, 1.2, 1, 1.1, 1, 0],
+                  opacity: [1, 1, 1, 1, 0.8, 0],
+                }}
+                transition={{
+                  duration: 3.5,
+                  delay: i * 0.08,
+                  times: [0, 0.5, 0.6, 0.65, 0.7, 1],
+                  ease: [0.4, 0, 0.2, 1],
+                }}
+              >
+                <Sparkles
+                  className={`w-8 h-8 ${
+                    luckScore === 100 ? 'text-yellow-400' : 'text-purple-400'
+                  }`}
+                />
+              </motion.div>
+            );
+          })}
 
           {/* Center Text */}
           <motion.div
@@ -88,33 +101,49 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
     );
   }
 
-  // 69: Hot Face Emoji ตกลงมา
+  // 69: Hot Face Emoji ตกลงมา + เด้ง
   if (luckScore === 69 && showEffect) {
     return (
       <AnimatePresence>
         <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-          {[...Array(15)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute text-6xl"
-              initial={{
-                x: `${Math.random() * 100}%`,
-                y: -100,
-                rotate: 0,
-              }}
-              animate={{
-                y: '110vh',
-                rotate: 360,
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                delay: i * 0.2,
-                ease: 'linear',
-              }}
-            >
-              🥵
-            </motion.div>
-          ))}
+          {[...Array(20)].map((_, i) => {
+            const startX = 10 + Math.random() * 80;
+            const finalY = 60 + Math.random() * 25;
+            return (
+              <motion.div
+                key={i}
+                className="absolute text-6xl"
+                style={{ left: `${startX}%` }}
+                initial={{
+                  y: -150,
+                  rotate: 0,
+                  scale: 0.3,
+                }}
+                animate={{
+                  y: [
+                    -150,
+                    finalY + '%',
+                    (finalY - 8) + '%',
+                    finalY + '%',
+                    (finalY - 4) + '%',
+                    finalY + '%',
+                  ],
+                  rotate: [0, 180, 360, 400, 360],
+                  scale: [0.3, 1.3, 1, 1.1, 1, 0],
+                  opacity: [1, 1, 1, 1, 0.9, 0],
+                  x: [0, -20, 10, -5, 0, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  delay: i * 0.15,
+                  times: [0, 0.45, 0.55, 0.6, 0.65, 1],
+                  ease: [0.34, 1.56, 0.64, 1],
+                }}
+              >
+                🥵
+              </motion.div>
+            );
+          })}
 
           <motion.div
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -158,26 +187,44 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
             <p className="text-3xl text-white mt-4 font-bold">ฮ่าๆๆๆ!</p>
           </motion.div>
 
-          {/* Laughing Emoji Rain */}
-          {[...Array(10)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute text-5xl"
-              initial={{
-                x: `${10 + i * 10}%`,
-                y: -50,
-              }}
-              animate={{
-                y: '110vh',
-              }}
-              transition={{
-                duration: 2 + Math.random(),
-                delay: i * 0.3,
-              }}
-            >
-              😆
-            </motion.div>
-          ))}
+          {/* Laughing Emoji Rain - ตกลงมา + เด้ง */}
+          {[...Array(15)].map((_, i) => {
+            const startX = 5 + Math.random() * 90;
+            const finalY = 65 + Math.random() * 20;
+            return (
+              <motion.div
+                key={i}
+                className="absolute text-5xl"
+                style={{ left: `${startX}%` }}
+                initial={{
+                  y: -100,
+                  rotate: -30,
+                  scale: 0.4,
+                }}
+                animate={{
+                  y: [
+                    -100,
+                    finalY + '%',
+                    (finalY - 6) + '%',
+                    finalY + '%',
+                    (finalY - 3) + '%',
+                    finalY + '%',
+                  ],
+                  rotate: [-30, 30, -15, 10, -5, 0],
+                  scale: [0.4, 1.2, 1, 1.05, 1, 0],
+                  opacity: [1, 1, 1, 1, 0.85, 0],
+                }}
+                transition={{
+                  duration: 3.8,
+                  delay: i * 0.2,
+                  times: [0, 0.5, 0.58, 0.63, 0.68, 1],
+                  ease: 'easeOut',
+                }}
+              >
+                😆
+              </motion.div>
+            );
+          })}
         </div>
       </AnimatePresence>
     );
@@ -197,29 +244,44 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
             transition={{ duration: 1 }}
           />
 
-          {/* Sparkles */}
-          {[...Array(30)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute"
-              initial={{
-                x: `${Math.random() * 100}%`,
-                y: `${Math.random() * 100}%`,
-                scale: 0,
-              }}
-              animate={{
-                scale: [0, 1, 0],
-                opacity: [0, 1, 0],
-              }}
-              transition={{
-                duration: 2,
-                delay: Math.random() * 2,
-                repeat: 2,
-              }}
-            >
-              ✨
-            </motion.div>
-          ))}
+          {/* Sparkles - ตกลงมา + เด้ง */}
+          {[...Array(35)].map((_, i) => {
+            const startX = Math.random() * 100;
+            const finalY = 50 + Math.random() * 30;
+            return (
+              <motion.div
+                key={i}
+                className="absolute text-3xl"
+                style={{ left: `${startX}%` }}
+                initial={{
+                  y: -80,
+                  scale: 0.2,
+                  rotate: 0,
+                }}
+                animate={{
+                  y: [
+                    -80,
+                    finalY + '%',
+                    (finalY - 5) + '%',
+                    finalY + '%',
+                    (finalY - 2) + '%',
+                    finalY + '%',
+                  ],
+                  scale: [0.2, 1.5, 1.2, 1.3, 1.2, 0],
+                  rotate: [0, 360, 380, 360],
+                  opacity: [1, 1, 1, 1, 0.9, 0],
+                }}
+                transition={{
+                  duration: 3.5,
+                  delay: i * 0.08,
+                  times: [0, 0.5, 0.58, 0.62, 0.66, 1],
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+              >
+                ✨
+              </motion.div>
+            );
+          })}
 
           {/* Center Message */}
           <motion.div
@@ -255,31 +317,45 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
             exit={{ opacity: 0 }}
           />
 
-          {/* Floating Skulls */}
-          {[...Array(12)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute"
-              initial={{
-                x: `${Math.random() * 100}%`,
-                y: `${Math.random() * 100}%`,
-                opacity: 0,
-                scale: 0,
-              }}
-              animate={{
-                opacity: [0, 0.8, 0],
-                scale: [0, 1.5, 0],
-                rotate: 360,
-              }}
-              transition={{
-                duration: 3,
-                delay: i * 0.2,
-                ease: 'easeInOut',
-              }}
-            >
-              <Skull className="w-12 h-12 text-gray-400" />
-            </motion.div>
-          ))}
+          {/* Floating Skulls - ตกลงมา + เด้ง */}
+          {[...Array(18)].map((_, i) => {
+            const startX = Math.random() * 100;
+            const finalY = 55 + Math.random() * 25;
+            return (
+              <motion.div
+                key={i}
+                className="absolute"
+                style={{ left: `${startX}%` }}
+                initial={{
+                  y: -120,
+                  opacity: 0,
+                  scale: 0,
+                  rotate: -45,
+                }}
+                animate={{
+                  y: [
+                    -120,
+                    finalY + '%',
+                    (finalY - 7) + '%',
+                    finalY + '%',
+                    (finalY - 4) + '%',
+                    finalY + '%',
+                  ],
+                  opacity: [0, 0.9, 0.9, 0.8, 0.7, 0],
+                  scale: [0, 1.8, 1.4, 1.5, 1.4, 0],
+                  rotate: [-45, 45, -20, 10, -5, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  delay: i * 0.15,
+                  times: [0, 0.48, 0.56, 0.6, 0.64, 1],
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <Skull className="w-12 h-12 text-gray-400" />
+              </motion.div>
+            );
+          })}
 
           {/* Center Skull */}
           <motion.div
