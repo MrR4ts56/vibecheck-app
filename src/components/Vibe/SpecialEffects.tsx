@@ -27,15 +27,16 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
     return () => clearTimeout(timer);
   }, [luckScore]);
 
-  // 0 หรือ 100: Perfect Score - Fireworks ตกลงมา + เด้ง
+  // 0 หรือ 100: Perfect Score - Fireworks ตกลงมาแล้วเด้งบนพื้น
   if ((luckScore === 0 || luckScore === 100) && showEffect) {
     return (
       <AnimatePresence>
         <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-          {/* Fireworks Effect - ตกลงมาจากบน */}
+          {/* Fireworks Effect - ตกลงมาจากบนแล้วเด้ง */}
           {[...Array(30)].map((_, i) => {
-            const startX = Math.random() * 100;
-            const finalY = 70 + Math.random() * 20;
+            const startX = 5 + Math.random() * 90;
+            const ground = 90; // พื้น = 90vh
+            const horizontalDrift = (Math.random() - 0.5) * 30; // เลื่อนซ้ายขวาเล็กน้อย
             return (
               <motion.div
                 key={i}
@@ -43,27 +44,40 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
                 style={{ left: `${startX}%` }}
                 initial={{
                   y: -100,
+                  x: 0,
                   rotate: Math.random() * 360,
                   scale: 0.5,
                   opacity: 1,
                 }}
                 animate={{
                   y: [
-                    -100,
-                    finalY + '%',
-                    (finalY - 5) + '%',
-                    finalY + '%',
-                    (finalY - 3) + '%',
-                    finalY + '%',
+                    -100,    // เริ่มจากบนจอ
+                    ground,  // ตกถึงพื้น
+                    ground - 25,  // เด้งขึ้นสูง
+                    ground,  // ตกลงพื้น
+                    ground - 15,  // เด้งขึ้นปานกลาง
+                    ground,  // ตกลงพื้น
+                    ground - 8,   // เด้งขึ้นเบา
+                    ground,  // หยุดที่พื้น
                   ],
-                  rotate: Math.random() * 720,
-                  scale: [0.5, 1.2, 1, 1.1, 1, 0],
-                  opacity: [1, 1, 1, 1, 0.8, 0],
+                  x: [0, horizontalDrift * 0.3, horizontalDrift * 0.6, horizontalDrift, horizontalDrift, horizontalDrift, horizontalDrift, horizontalDrift],
+                  rotate: [
+                    Math.random() * 360,
+                    Math.random() * 720,
+                    Math.random() * 360,
+                    Math.random() * 540,
+                    Math.random() * 360,
+                    Math.random() * 180,
+                    0,
+                    0,
+                  ],
+                  scale: [0.5, 1, 1.2, 1, 1.1, 1, 1, 0],
+                  opacity: [1, 1, 1, 1, 1, 1, 0.8, 0],
                 }}
                 transition={{
-                  duration: 3.5,
+                  duration: 4,
                   delay: i * 0.08,
-                  times: [0, 0.5, 0.6, 0.65, 0.7, 1],
+                  times: [0, 0.3, 0.38, 0.5, 0.58, 0.68, 0.76, 1],
                   ease: [0.4, 0, 0.2, 1],
                 }}
               >
@@ -101,42 +115,59 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
     );
   }
 
-  // 69: Hot Face Emoji ตกลงมา + เด้ง
+  // 69: Hot Face Emoji ตกลงมาแล้วเด้งบนพื้น
   if (luckScore === 69 && showEffect) {
     return (
       <AnimatePresence>
         <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-          {[...Array(20)].map((_, i) => {
-            const startX = 10 + Math.random() * 80;
-            const finalY = 60 + Math.random() * 25;
+          {[...Array(25)].map((_, i) => {
+            const startX = 5 + Math.random() * 90;
+            const ground = 88;
+            const horizontalDrift = (Math.random() - 0.5) * 40;
             return (
               <motion.div
                 key={i}
-                className="absolute text-6xl"
+                className="absolute text-5xl"
                 style={{ left: `${startX}%` }}
                 initial={{
                   y: -150,
+                  x: 0,
                   rotate: 0,
                   scale: 0.3,
                 }}
                 animate={{
                   y: [
-                    -150,
-                    finalY + '%',
-                    (finalY - 8) + '%',
-                    finalY + '%',
-                    (finalY - 4) + '%',
-                    finalY + '%',
+                    -150,        // เริ่มจากบนจอ
+                    ground,      // ตกถึงพื้น
+                    ground - 30, // เด้งสูงมาก (ตัวใหญ่เด้งสูงกว่า)
+                    ground,      // ตกลงพื้น
+                    ground - 18, // เด้งปานกลาง
+                    ground,      // ตกลงพื้น
+                    ground - 10, // เด้งเบา
+                    ground,      // ตกลงพื้น
+                    ground - 5,  // เด้งเบามาก
+                    ground,      // หยุดที่พื้น
                   ],
-                  rotate: [0, 180, 360, 400, 360],
-                  scale: [0.3, 1.3, 1, 1.1, 1, 0],
-                  opacity: [1, 1, 1, 1, 0.9, 0],
-                  x: [0, -20, 10, -5, 0, 0],
+                  x: [
+                    0,
+                    horizontalDrift * 0.2,
+                    horizontalDrift * 0.4,
+                    horizontalDrift * 0.6,
+                    horizontalDrift * 0.8,
+                    horizontalDrift,
+                    horizontalDrift,
+                    horizontalDrift,
+                    horizontalDrift,
+                    horizontalDrift,
+                  ],
+                  rotate: [0, 120, 240, 360, 480, 540, 580, 600, 620, 630],
+                  scale: [0.3, 1, 1.4, 1, 1.3, 1, 1.2, 1, 1.1, 0],
+                  opacity: [1, 1, 1, 1, 1, 1, 1, 1, 0.9, 0],
                 }}
                 transition={{
-                  duration: 4,
-                  delay: i * 0.15,
-                  times: [0, 0.45, 0.55, 0.6, 0.65, 1],
+                  duration: 4.5,
+                  delay: i * 0.12,
+                  times: [0, 0.25, 0.32, 0.42, 0.49, 0.59, 0.66, 0.76, 0.83, 1],
                   ease: [0.34, 1.56, 0.64, 1],
                 }}
               >
@@ -166,9 +197,9 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
   if (luckScore === 55 && showEffect) {
     return (
       <AnimatePresence>
-        <div className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center">
+        <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
           <motion.div
-            className="text-center"
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
             initial={{ scale: 0, rotate: -180 }}
             animate={{
               scale: [0, 1.2, 1],
@@ -187,37 +218,55 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
             <p className="text-3xl text-white mt-4 font-bold">ฮ่าๆๆๆ!</p>
           </motion.div>
 
-          {/* Laughing Emoji Rain - ตกลงมา + เด้ง */}
-          {[...Array(15)].map((_, i) => {
+          {/* Laughing Emoji Rain - ตกลงมาแล้วเด้งบนพื้น */}
+          {[...Array(20)].map((_, i) => {
             const startX = 5 + Math.random() * 90;
-            const finalY = 65 + Math.random() * 20;
+            const ground = 88;
+            const horizontalDrift = (Math.random() - 0.5) * 35;
             return (
               <motion.div
                 key={i}
                 className="absolute text-5xl"
                 style={{ left: `${startX}%` }}
                 initial={{
-                  y: -100,
+                  y: -120,
+                  x: 0,
                   rotate: -30,
                   scale: 0.4,
                 }}
                 animate={{
                   y: [
-                    -100,
-                    finalY + '%',
-                    (finalY - 6) + '%',
-                    finalY + '%',
-                    (finalY - 3) + '%',
-                    finalY + '%',
+                    -120,
+                    ground,
+                    ground - 28,
+                    ground,
+                    ground - 16,
+                    ground,
+                    ground - 9,
+                    ground,
+                    ground - 4,
+                    ground,
                   ],
-                  rotate: [-30, 30, -15, 10, -5, 0],
-                  scale: [0.4, 1.2, 1, 1.05, 1, 0],
-                  opacity: [1, 1, 1, 1, 0.85, 0],
+                  x: [
+                    0,
+                    horizontalDrift * 0.3,
+                    horizontalDrift * 0.5,
+                    horizontalDrift * 0.7,
+                    horizontalDrift * 0.85,
+                    horizontalDrift,
+                    horizontalDrift,
+                    horizontalDrift,
+                    horizontalDrift,
+                    horizontalDrift,
+                  ],
+                  rotate: [-30, 60, -20, 40, -10, 20, -5, 10, 0, 0],
+                  scale: [0.4, 1, 1.3, 1, 1.2, 1, 1.1, 1, 1, 0],
+                  opacity: [1, 1, 1, 1, 1, 1, 1, 1, 0.9, 0],
                 }}
                 transition={{
-                  duration: 3.8,
-                  delay: i * 0.2,
-                  times: [0, 0.5, 0.58, 0.63, 0.68, 1],
+                  duration: 4.2,
+                  delay: i * 0.15,
+                  times: [0, 0.25, 0.32, 0.42, 0.49, 0.59, 0.66, 0.76, 0.83, 1],
                   ease: 'easeOut',
                 }}
               >
@@ -234,7 +283,7 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
   if ((luckScore === 7 || luckScore === 77) && showEffect) {
     return (
       <AnimatePresence>
-        <div className="fixed inset-0 pointer-events-none z-40">
+        <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
           {/* Golden Overlay */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-br from-yellow-600/30 via-yellow-400/20 to-orange-600/30"
@@ -244,10 +293,11 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
             transition={{ duration: 1 }}
           />
 
-          {/* Sparkles - ตกลงมา + เด้ง */}
+          {/* Sparkles - ตกลงมาแล้วเด้งบนพื้น */}
           {[...Array(35)].map((_, i) => {
-            const startX = Math.random() * 100;
-            const finalY = 50 + Math.random() * 30;
+            const startX = 5 + Math.random() * 90;
+            const ground = 89;
+            const horizontalDrift = (Math.random() - 0.5) * 25;
             return (
               <motion.div
                 key={i}
@@ -255,26 +305,39 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
                 style={{ left: `${startX}%` }}
                 initial={{
                   y: -80,
+                  x: 0,
                   scale: 0.2,
                   rotate: 0,
                 }}
                 animate={{
                   y: [
                     -80,
-                    finalY + '%',
-                    (finalY - 5) + '%',
-                    finalY + '%',
-                    (finalY - 2) + '%',
-                    finalY + '%',
+                    ground,
+                    ground - 22,
+                    ground,
+                    ground - 13,
+                    ground,
+                    ground - 7,
+                    ground,
                   ],
-                  scale: [0.2, 1.5, 1.2, 1.3, 1.2, 0],
-                  rotate: [0, 360, 380, 360],
-                  opacity: [1, 1, 1, 1, 0.9, 0],
+                  x: [
+                    0,
+                    horizontalDrift * 0.4,
+                    horizontalDrift * 0.6,
+                    horizontalDrift * 0.8,
+                    horizontalDrift * 0.9,
+                    horizontalDrift,
+                    horizontalDrift,
+                    horizontalDrift,
+                  ],
+                  scale: [0.2, 1.2, 1.5, 1.2, 1.3, 1.2, 1.1, 0],
+                  rotate: [0, 180, 360, 450, 540, 600, 630, 0],
+                  opacity: [1, 1, 1, 1, 1, 1, 0.9, 0],
                 }}
                 transition={{
-                  duration: 3.5,
+                  duration: 3.8,
                   delay: i * 0.08,
-                  times: [0, 0.5, 0.58, 0.62, 0.66, 1],
+                  times: [0, 0.3, 0.38, 0.5, 0.58, 0.7, 0.8, 1],
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
               >
@@ -308,7 +371,7 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
   if ((luckScore === 4 || luckScore === 44) && showEffect) {
     return (
       <AnimatePresence>
-        <div className="fixed inset-0 pointer-events-none z-40">
+        <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
           {/* Dark Overlay */}
           <motion.div
             className="absolute inset-0 bg-black/40"
@@ -317,10 +380,11 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
             exit={{ opacity: 0 }}
           />
 
-          {/* Floating Skulls - ตกลงมา + เด้ง */}
-          {[...Array(18)].map((_, i) => {
-            const startX = Math.random() * 100;
-            const finalY = 55 + Math.random() * 25;
+          {/* Floating Skulls - ตกลงมาแล้วเด้งบนพื้น */}
+          {[...Array(22)].map((_, i) => {
+            const startX = 5 + Math.random() * 90;
+            const ground = 87;
+            const horizontalDrift = (Math.random() - 0.5) * 30;
             return (
               <motion.div
                 key={i}
@@ -328,6 +392,7 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
                 style={{ left: `${startX}%` }}
                 initial={{
                   y: -120,
+                  x: 0,
                   opacity: 0,
                   scale: 0,
                   rotate: -45,
@@ -335,20 +400,32 @@ export function SpecialEffects({ luckScore }: SpecialEffectsProps) {
                 animate={{
                   y: [
                     -120,
-                    finalY + '%',
-                    (finalY - 7) + '%',
-                    finalY + '%',
-                    (finalY - 4) + '%',
-                    finalY + '%',
+                    ground,
+                    ground - 26,
+                    ground,
+                    ground - 15,
+                    ground,
+                    ground - 8,
+                    ground,
                   ],
-                  opacity: [0, 0.9, 0.9, 0.8, 0.7, 0],
-                  scale: [0, 1.8, 1.4, 1.5, 1.4, 0],
-                  rotate: [-45, 45, -20, 10, -5, 0],
+                  x: [
+                    0,
+                    horizontalDrift * 0.3,
+                    horizontalDrift * 0.5,
+                    horizontalDrift * 0.7,
+                    horizontalDrift * 0.85,
+                    horizontalDrift,
+                    horizontalDrift,
+                    horizontalDrift,
+                  ],
+                  opacity: [0, 0.9, 0.9, 0.9, 0.8, 0.8, 0.7, 0],
+                  scale: [0, 1.4, 1.8, 1.4, 1.6, 1.4, 1.3, 0],
+                  rotate: [-45, 90, -30, 60, -15, 30, 0, 0],
                 }}
                 transition={{
-                  duration: 4,
-                  delay: i * 0.15,
-                  times: [0, 0.48, 0.56, 0.6, 0.64, 1],
+                  duration: 4.3,
+                  delay: i * 0.12,
+                  times: [0, 0.28, 0.36, 0.48, 0.56, 0.68, 0.8, 1],
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
